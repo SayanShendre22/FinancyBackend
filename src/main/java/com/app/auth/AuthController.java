@@ -39,7 +39,7 @@ public class AuthController {
 
 	@RequestMapping("/hello")
 	public String hello() {
-		return "Hello this is an test API";
+		return "Hello this is an test API  ";
 	}
 
 	@RequestMapping("/register")
