@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sayan
+      MYSQL_DATABASE: PersonalFinance
+      MYSQL_USER: root
+      MYSQL_PASSWORD: sayan
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    image: finacny-backend:latest   # your Spring Boot image
+    container_name: springboot-app
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/PersonalFinance
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: sayan
+
+volumes:
+  mysql-data:
