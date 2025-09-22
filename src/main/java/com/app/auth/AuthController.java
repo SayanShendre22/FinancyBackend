@@ -41,6 +41,11 @@ public class AuthController {
 	public String hello() {
 		return "Hello this is an test API  ";
 	}
+	
+	@RequestMapping("/demo")
+	public String hello1() {
+		return "Just testing our API and CICD pipeline flow.";
+	}
 
 	@RequestMapping("/register")
 	public ResponseEntity<TokenModel> register(@RequestBody SignUpUser user) {
