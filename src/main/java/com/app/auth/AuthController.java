@@ -44,8 +44,9 @@ public class AuthController {
 	
 	@RequestMapping("/demo")
 	public String hello1() {
-		return "This is an demo API to check CICD flow";
+		return "THis is an demo API to check CICD pipeline";
 	}
+	
 	
 
 	@RequestMapping("/register")
