@@ -9,8 +9,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: sayan   # Root password
       MYSQL_DATABASE: PersonalFinance    # Database to create
-      MYSQL_USER: root            # Dedicated user
-      MYSQL_PASSWORD: sayan    # User password
+      # MYSQL_USER: root            # Dedicated user
+      # MYSQL_PASSWORD: sayan    # User password
     ports:
       - "3306:3306"
     volumes:
