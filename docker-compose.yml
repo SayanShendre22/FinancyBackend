@@ -7,19 +7,19 @@ services:
     container_name: mysql-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: sayan
-      MYSQL_DATABASE: PersonalFinance
-      MYSQL_USER: financyuser
-      MYSQL_PASSWORD: financypassword
+      MYSQL_ROOT_PASSWORD: rootpassword   # Root password
+      MYSQL_DATABASE: PersonalFinance    # Database to create
+      MYSQL_USER: financyuser            # Dedicated user
+      MYSQL_PASSWORD: financypassword    # User password
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
   app:
-    image: finacny-backend:latest   # your Spring Boot image
-    container_name: springboot-app
     build: .
+    image: finacny-backend:latest
+    container_name: springboot-app
     depends_on:
       - mysql
     ports:
@@ -28,6 +28,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/PersonalFinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: financyuser
       SPRING_DATASOURCE_PASSWORD: financypassword
+      SERVER_PORT: 9090
 
 volumes:
   mysql-data:
