@@ -9,8 +9,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: sayan
       MYSQL_DATABASE: PersonalFinance
-      MYSQL_USER: root
-      MYSQL_PASSWORD: sayan
+      MYSQL_USER: financyuser
+      MYSQL_PASSWORD: financypassword
     ports:
       - "3306:3306"
     volumes:
@@ -25,9 +25,9 @@ services:
     ports:
       - "9090:9090"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/PersonalFinance
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: sayan
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/PersonalFinance?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: financyuser
+      SPRING_DATASOURCE_PASSWORD: financypassword
 
 volumes:
   mysql-data:
