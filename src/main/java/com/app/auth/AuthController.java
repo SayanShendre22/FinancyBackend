@@ -27,13 +27,13 @@ public class AuthController {
 
 	@Autowired
 	AuthService authService;
-	
+
 	@Autowired
 	JwtService jwt;
-	
+
 	@Autowired
 	AuthenticationManager manager;
-	
+
 	@Autowired
 	UserRepo ur;
 
@@ -44,43 +44,43 @@ public class AuthController {
 
 	@RequestMapping("/register")
 	public ResponseEntity<TokenModel> register(@RequestBody SignUpUser user) {
-		String resp =authService.signUp(user);
+		String resp = authService.signUp(user);
 		// also take username while registration in future
-		
-		if(resp.equalsIgnoreCase("registered")) {
-			//mail already registered
+
+		if (resp.equalsIgnoreCase("registered")) {
+			// mail already registered
 			return new ResponseEntity<TokenModel>(HttpStatus.BAD_REQUEST);
-		}else if(resp.equalsIgnoreCase("not done")) {
-			 new ResponseEntity<String>("not done",HttpStatus.BAD_REQUEST);
+		} else if (resp.equalsIgnoreCase("not done")) {
+			new ResponseEntity<String>("not done", HttpStatus.BAD_REQUEST);
 		}
-		
-		String token=null;
-		
-		if(ur.findByUsername(user.getUsername()).isPresent()) {
-			UserData newuser  = ur.findByUsername(user.getUsername()).get();
-			 token = jwt.generateToken(newuser);
+
+		String token = null;
+
+		if (ur.findByUsername(user.getUsername()).isPresent()) {
+			UserData newuser = ur.findByUsername(user.getUsername()).get();
+			token = jwt.generateToken(newuser);
 		}
 		return new ResponseEntity<TokenModel>(new TokenModel(token), HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<TokenModel> login(@RequestBody AuthModel auth, HttpServletRequest request) {
-		
+
 //		UserData u = authService.loginUser(auth);
 //		boolean u = this.doAuthenticate(auth.getEmail(), auth.getPassword());
-		
+
 		UserData u = authService.loginUser(auth);
-		
-		if (u!=null) {
+
+		if (u != null) {
 			System.err.println("Login successfull...!");
-			
+
 			HttpSession session = request.getSession();
 			session.setAttribute("user", u);
-			
+
 			System.out.println(u.toString());
-			
+
 			String token = jwt.generateToken(u);
-			
+
 			return new ResponseEntity<TokenModel>(new TokenModel(token), HttpStatus.OK);
 		} else {
 			System.out.println("Invalid crediential");
