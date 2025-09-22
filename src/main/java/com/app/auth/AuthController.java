@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RequestMapping("/auth")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8082")
 public class AuthController {
 
 	@Autowired
@@ -53,8 +53,13 @@ public class AuthController {
 		}else if(resp.equalsIgnoreCase("not done")) {
 			 new ResponseEntity<String>("not done",HttpStatus.BAD_REQUEST);
 		}
-		UserData newuser  = ur.findByUsername(user.getEmail()).get();
-		String token = jwt.generateToken(newuser);
+		
+		String token=null;
+		
+		if(ur.findByUsername(user.getUsername()).isPresent()) {
+			UserData newuser  = ur.findByUsername(user.getUsername()).get();
+			 token = jwt.generateToken(newuser);
+		}
 		return new ResponseEntity<TokenModel>(new TokenModel(token), HttpStatus.OK);
 	}
 

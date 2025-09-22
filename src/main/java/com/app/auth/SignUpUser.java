@@ -42,6 +42,11 @@ public class SignUpUser {
 	public void setRegisteredAt(LocalDateTime registeredAt) {
 		this.registeredAt = registeredAt;
 	}
+	@Override
+	public String toString() {
+		return "SignUpUser [email=" + email + ", username=" + username + ", password=" + password + ", registeredAt="
+				+ registeredAt + "]";
+	}
 	
 	
 	

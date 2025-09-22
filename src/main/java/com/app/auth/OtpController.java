@@ -12,7 +12,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins ="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8082")
 public class OtpController {
 
     @Autowired

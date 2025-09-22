@@ -19,7 +19,7 @@ public class AuthService {
 	public String signUp(SignUpUser user) {
 		
 		try {
-			if( authRepo.findByEmail(user.getEmail()).get() != null  ) {
+			if( authRepo.findByEmail(user.getEmail()).isPresent()) {
 				System.out.println("Email allready registerd");
 				return "registered";
 			}
@@ -57,7 +57,7 @@ public class AuthService {
 		Optional<UserData> user = authRepo.login(auth.getEmail(), auth.getEmail(), auth.getPassword());
 		
 		try {
-			if(user.get()!=null) {
+			if(user.isPresent()) {
 				return user.get();
 			}
 		}catch (Exception e) {
