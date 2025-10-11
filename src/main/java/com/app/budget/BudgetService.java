@@ -32,7 +32,7 @@ public class BudgetService {
 	@Autowired
 	JwtService jwt;
 	
-	@PostMapping("/budget")
+	@PostMapping("//budget")
 	public BudgetModel createBudget(@RequestBody BudgetModel budgetModel,@RequestHeader("Authorization") String authHeader) {
 		String token = authHeader.replace("Bearer ", "");
 		UserData userDetails = ur.getById(jwt.extractUserId(token));

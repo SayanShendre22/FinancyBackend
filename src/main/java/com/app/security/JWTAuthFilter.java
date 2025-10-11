@@ -54,13 +54,14 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 		    return;
 		}
 		 
-		System.out.println("here");
+		System.out.println("here in filter chain");
 
 		token = authHeader.substring(7);
 //		username = jwtService.extractUsername(token);
+//		System.out.println(jwtService.isTokenValid(token));
 		
 		if (jwtService.isTokenValid(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+//			System.out.println("here");
 			Long userId = jwtService.extractUserId(token);
 			UserData user = userDetailsService.loadById(userId);
 			

@@ -25,58 +25,62 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class BalanceController {
-	
+
 	@Autowired
 	BalanceService balanceService;
-	
+
 	@Autowired
 	JwtService jwt;
-	
+
 	@Autowired
 	UserRepo ur;
-	
+
 	// create account
 	@PostMapping("/createBankAccount")
-	public BalanceModel createAccount(@RequestBody BalanceModel bm,@RequestHeader("Authorization") String authHeader) {
+	public BalanceModel createAccount(@RequestBody BalanceModel bm, @RequestHeader("Authorization") String authHeader) {
 		String token = authHeader.replace("Bearer ", "");
 		UserData userDetails = ur.getById(jwt.extractUserId(token));
-			return balanceService.createAccount(bm, userDetails);
+		return balanceService.createAccount(bm, userDetails);
 	}
-	
+
 	// update account
 	@PostMapping("/updateBankAccount")
 	public BalanceModel updateAccount(@RequestBody BalanceModel bm) {
-			return balanceService.updateAccount(bm);
+		return balanceService.updateAccount(bm);
 	}
-	
+
 	// delete account
 	@RequestMapping("/deleteAcount/{id}")
 	public boolean deleteAccount(@PathVariable long id) {
 		return balanceService.deleteAccount(id);
 	}
-	
-	//read account
+
+	// read account
 	@RequestMapping("/getAccount")
-	public ResponseEntity<List<BalanceModel>> getAccount(HttpSession session,@RequestHeader("Authorization") String authHeader  ) {
+	public ResponseEntity<List<BalanceModel>> getAccount(HttpSession session,
+			@RequestHeader("Authorization") String authHeader) {
 		String token = authHeader.replace("Bearer ", "");
 		UserData user = ur.getById(jwt.extractUserId(token));
-		if(user!=null) {
-			return new ResponseEntity<List<BalanceModel>>(balanceService.getAccountDetails(user),HttpStatus.OK);
-		}else {
-			 System.out.println("unable to find account details");
-			 return new ResponseEntity<List<BalanceModel>>(balanceService.getAccountDetails(user),HttpStatus.NOT_FOUND);
+		if (user != null) {
+			return new ResponseEntity<List<BalanceModel>>(balanceService.getAccountDetails(user), HttpStatus.OK);
+		} else {
+			System.out.println("unable to find account details");
+			return new ResponseEntity<List<BalanceModel>>(balanceService.getAccountDetails(user), HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	// update balance 
-	@PostMapping("/updateBalance")
-	public boolean updateBalance(@PathVariable long bal,HttpSession session) {
-		UserData user = (UserData) session.getAttribute("user");
-		if(user!=null) {
+
+	// update balance
+	@PostMapping("/updateBalance/{bal}")
+	public boolean updateBalance(@PathVariable long bal, @RequestHeader("Authorization") String authHeader) {
+		System.out.println("finding user ");
+		String token = authHeader.replace("Bearer ", "");
+		UserData user = ur.getById(jwt.extractUserId(token));
+		if (user != null) {
+			System.out.println("found user");
 			return balanceService.upadateBalance(user.getId(), bal);
-		}else {
-			 System.out.println("unable to upadate balance");
-			 return false;
+		} else {
+			System.out.println("unable to upadate balance");
+			return false;
 		}
 	}
 

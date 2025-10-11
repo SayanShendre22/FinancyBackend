@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RequestMapping("/profile")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8082")
 public class ProfileController {
 
 	@Autowired
@@ -37,7 +37,6 @@ public class ProfileController {
 	
 	@Autowired
 	JwtService jwt;
-	
 	
 	@GetMapping("/getProfile")
 	public ResponseEntity<ProfileModel> getProfile( @RequestHeader("Authorization") String authHeader) {
@@ -59,7 +58,7 @@ public class ProfileController {
 			throws IOException {
 		String token = authHeader.replace("Bearer ", "");
 		UserData userDetails = ur.getById(jwt.extractUserId(token));
-//		System.out.println(profile.toString()+" "+ userDetails.toString());
+		System.out.println(profile.toString()+" "+ userDetails.toString());
 
 		if (userDetails != null) {
 			ProfileModel updatedProfile = profileService.SaveProfile(profile, userDetails);

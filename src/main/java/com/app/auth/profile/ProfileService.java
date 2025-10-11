@@ -25,11 +25,11 @@ public class ProfileService {
 	ProfileRepo profileRepo;
 
 	public ProfileModel SaveProfile(ProfileModel profile,UserData user) throws IOException {
-		
+		System.out.println("incomming progile obj "+profile);
 		profile.setUser(user);
 		
 		ProfileModel pnew = profileRepo.findByUserId(user.getId());
-//		System.out.println("undder profile service "+pnew+" "+user);
+		System.out.println("undder profile service "+pnew+" "+user+ " "+ profile);
 		ProfileModel p;
 		
 		//update profile
@@ -61,7 +61,7 @@ public class ProfileService {
 			if(!F.exists()) {
 				F.mkdir();
 			}
-
+			System.out.println("clear here"+profile.getPP().getInputStream()+" : "+Paths.get(filePath));
 			//copy file
 			Files.copy(pnew.getPP().getInputStream(), Paths.get(filePath));
 			
@@ -99,7 +99,7 @@ public class ProfileService {
 			if(!F.exists()) {
 				F.mkdir();
 			}
-			System.out.println("clear here");
+			System.out.println("clear here"+profile.getPP().getInputStream()+" : "+Paths.get(filePath));
 			//copy file
 			Files.copy(profile.getPP().getInputStream(), Paths.get(filePath));
 			 

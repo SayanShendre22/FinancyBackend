@@ -26,7 +26,7 @@ public class TransactionModel {
 
     private BigDecimal amount;
 
-    private String type; // "CREDIT" or "DEBIT"
+    private String type; // "Income" or "Expense"
 
     private String description;
     
@@ -39,7 +39,6 @@ public class TransactionModel {
         this.timestamp = LocalDateTime.now();
     }
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_id")
     private BalanceModel bankAccount;
@@ -49,6 +48,8 @@ public class TransactionModel {
 	@Transient
 	private MultipartFile recipt;
 
+	
+//	getter & setters 
 	public Long getId() {
 		return id;
 	}

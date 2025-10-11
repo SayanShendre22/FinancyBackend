@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.security.JwtService;
 
+import jakarta.websocket.server.PathParam;
+
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8082")
 public class UserController {
 	
 	
@@ -64,11 +67,14 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/getUserByToken")
-	public ResponseEntity<UserData> getByToken(String token){
+	@GetMapping("/getUserByToken/{token}")
+	public ResponseEntity<UserData> getByToken(@PathVariable String  token){
+		
+		System.out.println("here /getUserByToken");
 		
 		long userid = jwt.extractUserId(token);
 		UserData ud=uds.loadById(userid);
+		System.out.println(ud);
 			 if(ud!=null) {
 				  return ResponseEntity.ok(ud);
 			 }else {

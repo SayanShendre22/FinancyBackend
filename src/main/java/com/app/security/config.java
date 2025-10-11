@@ -27,7 +27,9 @@ public class config {
 						 "/auth/**",
 					     "/images/**",
 					     "/profilePic/**",
-					     "/static/**"
+					     "/static/**",
+					     "/actuator/**",
+					     "/user/**"
 						).permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

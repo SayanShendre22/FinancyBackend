@@ -13,63 +13,63 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class BalanceService {
-	
+
 	@Autowired
 	BalanceRepo balanceRepo;
-	
-	//create new account 
-	public BalanceModel createAccount(BalanceModel b,UserData user ) {
+
+	// create new account
+	public BalanceModel createAccount(BalanceModel b, UserData user) {
 		b.setUser(user);
 		return balanceRepo.save(b);
 	}
-	
-	//delete account
+
+	// delete account
 	public boolean deleteAccount(long id) {
 		balanceRepo.deleteById(id);
 		try {
 			BalanceModel b = balanceRepo.findById(id).get();
 			return false;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return true;
 		}
 	}
-	
-	// update Account 
+
+	// update Account
 	public BalanceModel updateAccount(BalanceModel bal) {
-		
-		BalanceModel b = balanceRepo.findById(bal.getId()).get();
+		BalanceModel b = null;
+		if (balanceRepo.findById(bal.getId()).isPresent()) {
+			b = balanceRepo.findById(bal.getId()).get();
+		}
 		b.setAccountNumber(bal.getAccountNumber());
 		b.setAccountType(bal.getAccountType());
 		b.setBalance(bal.getBalance());
 		b.setBankName(bal.getBankName());
 		b.setFetchedAt(LocalDateTime.now());
 		b.setIfscCode(bal.getIfscCode());
-		
+
 		return balanceRepo.save(b);
 	}
-	
-	// read account 
+
+	// read account
 	public List<BalanceModel> getAccountDetails(UserData user) {
 		return balanceRepo.findByUser(user);
 	}
-	
-	//update balance
-	public boolean upadateBalance(long id,double bal) {
+
+	// update balance
+	public boolean upadateBalance(long id, double bal) {
 		try {
 			BalanceModel b = balanceRepo.findById(id).get();
 			b.setBalance(bal);
 			BalanceModel bnew = balanceRepo.save(b);
-			if(bnew!=null) {
+			if (bnew != null) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	
 
 }
