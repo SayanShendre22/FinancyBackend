@@ -1,8 +1,10 @@
 package com.app.transaction;
 
 import java.io.IOException;
+
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,10 @@ public class TransactionController {
 	@Autowired
 	private TransactionService transactionService;
 
-	@PostMapping("/addTransactions/{accountId}")
+	@PostMapping(
+		    value = "/addTransactions/{accountId}",
+		    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+		)
 	public ResponseEntity<TransactionModel> addTransaction(@PathVariable Long accountId,
 			@ModelAttribute TransactionModel txn) throws IOException {
 		TransactionModel saved = transactionService.addTransaction(accountId, txn);

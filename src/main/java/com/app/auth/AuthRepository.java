@@ -12,10 +12,9 @@ import com.app.user.UserData;
 @Repository
 public interface AuthRepository extends JpaRepository<UserData, Integer>  {
 
-	 @Query("SELECT u FROM UserData u WHERE (u.email = :email OR u.username = :username) AND u.password = :password")
-	 Optional<UserData> login(@Param("email") String email,
-	                             @Param("username") String fullname,
-	                             @Param("password") String password);
+	@Query("SELECT u FROM UserData u WHERE u.email = :value OR u.username = :value")
+	Optional<UserData> findByEmailOrUsername(@Param("value") String value);
+
 	 
 	 Optional<UserData> findByEmail(String Email);
 	 Optional<UserData> findByUsername(String Email);

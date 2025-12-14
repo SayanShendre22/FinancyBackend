@@ -73,16 +73,13 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<TokenModel> login(@RequestBody AuthModel auth, HttpServletRequest request) {
 
-//		UserData u = authService.loginUser(auth);
-//		boolean u = this.doAuthenticate(auth.getEmail(), auth.getPassword());
-
 		UserData u = authService.loginUser(auth);
 
 		if (u != null) {
 			System.err.println("Login successfull...!");
 
-			HttpSession session = request.getSession();
-			session.setAttribute("user", u);
+//			HttpSession session = request.getSession();
+//			session.setAttribute("user", u);
 
 			System.out.println(u.toString());
 

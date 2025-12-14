@@ -6,6 +6,7 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +55,10 @@ public class ProfileController {
 	}
 	
 
-	@PostMapping("/saveProfile")
+	@PostMapping(
+		    value = "/saveProfile",
+		    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+		)
 	public ResponseEntity<String> saveProfile(@ModelAttribute ProfileModel profile, @RequestHeader("Authorization") String authHeader)
 			throws IOException {
 		String token = authHeader.replace("Bearer ", "");
@@ -65,7 +69,7 @@ public class ProfileController {
 			ProfileModel updatedProfile = profileService.SaveProfile(profile, userDetails);
 //			System.out.println("wsofgosg " + updatedProfile.toString());
 			if (updatedProfile != null) {
-				return new ResponseEntity<String>("Drofile updated successfully",HttpStatus.OK);
+				return new ResponseEntity<String>("Profile updated successfully",HttpStatus.OK);
 			}
 
 		}

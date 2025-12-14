@@ -3,6 +3,7 @@ package com.app.auth;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.user.UserData;
@@ -15,6 +16,9 @@ public class AuthService {
 	
 	@Autowired
 	OtpController otpController;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public String signUp(SignUpUser user) {
 		
@@ -38,7 +42,7 @@ public class AuthService {
 		
 		UserData newUser = new UserData();
 		newUser.setEmail(user.getEmail());
-		newUser.setPassword(user.getPassword());
+		newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		newUser.setRegisteredAt(user.getRegisteredAt());
 		newUser.setUsername(user.getUsername());
 		
@@ -53,18 +57,22 @@ public class AuthService {
 	}
 	
 	public UserData loginUser(AuthModel auth) {
-		
-		Optional<UserData> user = authRepo.login(auth.getEmail(), auth.getEmail(), auth.getPassword());
-		
-		try {
-			if(user.isPresent()) {
-				return user.get();
-			}
-		}catch (Exception e) {
-			return null;
-		}
-		
-		return null;
+
+	    Optional<UserData> userOpt =
+	            authRepo.findByEmailOrUsername(auth.getEmail());
+
+	    if (userOpt.isEmpty()) {
+	        throw new RuntimeException("User not found");
+	    }
+
+	    UserData user = userOpt.get();
+
+	    // ✅ BCrypt comparison
+	    if (!passwordEncoder.matches(auth.getPassword(), user.getPassword())) {
+	        throw new RuntimeException("Invalid credentials");
+	    }
+
+	    return user; // login success
 	}
 	
 }

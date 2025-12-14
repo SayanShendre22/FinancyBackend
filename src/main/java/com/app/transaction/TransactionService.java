@@ -37,25 +37,29 @@ public class TransactionService {
 
 	// add
 	public TransactionModel addTransaction(Long accountId, TransactionModel txn) throws IOException {
+
 		BalanceModel account = bankRepo.findById(accountId)
 				.orElseThrow(() -> new RuntimeException("Bank Account not found"));
 		txn.setBankAccount(account);
 
-		String filename = txn.getRecipt().getOriginalFilename();
-		String randomId = UUID.randomUUID().toString();
-		String filename1 = randomId + filename;
-		String filePath = path + File.separator + filename1;
+		if (txn.getRecipt() != null && !txn.getRecipt().isEmpty()) {
+			String filename = txn.getRecipt().getOriginalFilename();
+			String randomId = UUID.randomUUID().toString();
+			String filename1 = randomId + filename;
+			String filePath = path + File.separator + filename1;
 
-		// create folder if not created
-		File F = new File(path);
-		if (!F.exists()) {
-			F.mkdir();
+			// create folder if not created
+			File F = new File(path);
+			if (!F.exists()) {
+				F.mkdir();
+			}
+			System.out.println("clear here" + txn.getRecipt().getInputStream() + " : " + Paths.get(filePath));
+			// copy file
+			Files.copy(txn.getRecipt().getInputStream(), Paths.get(filePath));
+
+			txn.setReciptName(filename1);
 		}
-		System.out.println("clear here" + txn.getRecipt().getInputStream() + " : " + Paths.get(filePath));
-		// copy file
-		Files.copy(txn.getRecipt().getInputStream(), Paths.get(filePath));
 
-		txn.setReciptName(filename1);
 		// update bank balance "CREDIT" or "DEBIT"
 		// for credit
 		if (txn.getType().equalsIgnoreCase("income")) {
@@ -64,6 +68,7 @@ public class TransactionService {
 			// for DEBIT
 			account.setBalance(account.getBalance() - txn.getAmount().floatValue());
 		}
+		System.out.println("saving tnx");
 		return transactionRepo.save(txn);
 	}
 
